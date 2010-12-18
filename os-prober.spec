@@ -1,11 +1,11 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
 Name:		os-prober
-Version:	1.22
+Version:	1.41
 Release:	1
 License:	GPL
 Group:		Base/Kernel
 URL:		http://packages.qa.debian.org/o/os-prober.html
-Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.bz2
+Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.gz
 # Source0-md5:	89c7744bb1dd3ff09ffbd896ff0baea0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -18,14 +18,20 @@ installer package to detect other filesystems with operating systems
 on them, and work out how to boot other linux installs.
 
 %prep
-%setup -q
+%setup -q -n %{name}
+
+%build
+%{__make} \
+	CC="%{__cc}"
+	CFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/lib/os-prober,%{_bindir},%{_datadir}/%{name}}
+install -d $RPM_BUILD_ROOT{/var/lib/%{name},%{_bindir},%{_datadir}/%{name},%{_libdir}/%{name}}
 install -p %{name} $RPM_BUILD_ROOT%{_bindir}
 install -p linux-boot-prober $RPM_BUILD_ROOT%{_bindir}
 cp -a common.sh $RPM_BUILD_ROOT%{_datadir}/%{name}
+install -p newns $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 %ifarch m68k
 ARCH=m68k
@@ -39,14 +45,18 @@ ARCH=sparc
 %ifarch %{ix86} %{x8664}
 ARCH=x86
 %endif
-for i in os-probes os-probes/mounted os-probes/init \
-         linux-boot-probes linux-boot-probes/mounted; do
-	install -d $RPM_BUILD_ROOT%{_libdir}/$i
-	cp -a $i/common/* $RPM_BUILD_ROOT%{_libdir}/$i
-	if [ -e "$i/$ARCH" ]; then
-		cp -a $i/$ARCH/* $RPM_BUILD_ROOT%{_libdir}/$i
+for probes in os-probes os-probes/mounted os-probes/init \
+			  linux-boot-probes linux-boot-probes/mounted; do \
+	install -d $RPM_BUILD_ROOT%{_libdir}/$probes
+	cp -a $probes/common/* $RPM_BUILD_ROOT%{_libdir}/$probes
+	if [ -e "$probes/$ARCH" ]; then
+		cp -a $probes/$ARCH/* $RPM_BUILD_ROOT%{_libdir}/$probes
 	fi
 done
+
+if [ "$ARCH" = x86 ]; then
+	cp -a os-probes/mounted/powerpc/20macosx $RPM_BUILD_ROOT%{_libdir}/os-probes/mounted
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -56,9 +66,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc README TODO debian/changelog debian/copyright
 %attr(755,root,root) %{_bindir}/*prober
 %dir %{_libdir}/os-probes
-%{_libdir}/os-probes/*
+%attr(755,root,root) %{_libdir}/os-probes/*
+%dir %{_libdir}/os-prober
+%attr(755,root,root) %{_libdir}/os-prober/newns
 %dir %{_libdir}/linux-boot-probes
-%{_libdir}/linux-boot-probes/*
+%attr(755,root,root) %{_libdir}/linux-boot-probes/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/common.sh
 %dir /var/lib/os-prober
