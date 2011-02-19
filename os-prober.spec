@@ -1,12 +1,12 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
 Name:		os-prober
-Version:	1.42
+Version:	1.44
 Release:	1
 License:	GPL
 Group:		Base/Kernel
 URL:		http://packages.qa.debian.org/o/os-prober.html
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.gz
-# Source0-md5:	8c208654327df559884a54b69d840219
+# Source0-md5:	44781dbc2fd748a678fe9d2f29f862ef
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # no binary blobs
@@ -18,7 +18,7 @@ installer package to detect other filesystems with operating systems
 on them, and work out how to boot other linux installs.
 
 %prep
-%setup -q -n %{name}
+%setup -q
 
 %build
 %{__make} \
