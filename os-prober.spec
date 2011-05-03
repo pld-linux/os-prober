@@ -1,12 +1,13 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
+Summary(pl.UTF-8):	Narzędzia wykrywające instalacje innych systemów operacyjnych na dyskach
 Name:		os-prober
-Version:	1.44
+Version:	1.46
 Release:	1
 License:	GPL
-Group:		Base/Kernel
-URL:		http://packages.qa.debian.org/o/os-prober.html
+Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.gz
-# Source0-md5:	44781dbc2fd748a678fe9d2f29f862ef
+# Source0-md5:	b49d98e33da4c2c2534fff6badc2013c
+URL:		http://packages.qa.debian.org/o/os-prober.html
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # no binary blobs
@@ -15,14 +16,20 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This is a small package that may be depended on by any bootloader
 installer package to detect other filesystems with operating systems
-on them, and work out how to boot other linux installs.
+on them, and work out how to boot other Linux installs.
+
+%description -l pl.UTF-8
+Ten mały pakiet może być wykorzystywany przez dowolne instalatory
+bootloaderów w celu wykrycia innych systemów plików zawierających
+systemy operacyjne i określenia sposobu uruchomienia innych instalacji
+Linuksa.
 
 %prep
 %setup -q
 
 %build
 %{__make} \
-	CC="%{__cc}"
+	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags}"
 
 %install
@@ -33,6 +40,7 @@ install -p linux-boot-prober $RPM_BUILD_ROOT%{_bindir}
 cp -a common.sh $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -p newns $RPM_BUILD_ROOT%{_libdir}/%{name}
 
+ARCH=other
 %ifarch m68k
 ARCH=m68k
 %endif
@@ -64,13 +72,20 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README TODO debian/changelog debian/copyright
-%attr(755,root,root) %{_bindir}/*prober
-%dir %{_libdir}/os-probes
-%attr(755,root,root) %{_libdir}/os-probes/*
+%attr(755,root,root) %{_bindir}/linux-boot-prober
+%attr(755,root,root) %{_bindir}/os-prober
+%dir %{_libdir}/linux-boot-probes
+%attr(755,root,root) %{_libdir}/linux-boot-probes/50mounted-tests
+%dir %{_libdir}/linux-boot-probes/mounted
+%attr(755,root,root) %{_libdir}/linux-boot-probes/mounted/*
 %dir %{_libdir}/os-prober
 %attr(755,root,root) %{_libdir}/os-prober/newns
-%dir %{_libdir}/linux-boot-probes
-%attr(755,root,root) %{_libdir}/linux-boot-probes/*
+%dir %{_libdir}/os-probes
+%attr(755,root,root) %{_libdir}/os-probes/50mounted-tests
+%dir %{_libdir}/os-probes/init
+%attr(755,root,root) %{_libdir}/os-probes/init/*
+%dir %{_libdir}/os-probes/mounted
+%attr(755,root,root) %{_libdir}/os-probes/mounted/*
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/common.sh
 %dir /var/lib/os-prober
