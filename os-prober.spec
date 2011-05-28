@@ -1,12 +1,12 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
 Summary(pl.UTF-8):	Narzędzia wykrywające instalacje innych systemów operacyjnych na dyskach
 Name:		os-prober
-Version:	1.46
+Version:	1.47
 Release:	1
 License:	GPL
 Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.gz
-# Source0-md5:	b49d98e33da4c2c2534fff6badc2013c
+# Source0-md5:	80075af089055c415654484a8ca6b5e8
 URL:		http://packages.qa.debian.org/o/os-prober.html
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -25,7 +25,7 @@ systemy operacyjne i określenia sposobu uruchomienia innych instalacji
 Linuksa.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 
 %build
 %{__make} \
