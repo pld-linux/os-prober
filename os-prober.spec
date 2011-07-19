@@ -2,7 +2,7 @@ Summary:	Utilities that detect other operating system installs on a set of drive
 Summary(pl.UTF-8):	Narzędzia wykrywające instalacje innych systemów operacyjnych na dyskach
 Name:		os-prober
 Version:	1.47
-Release:	1
+Release:	2
 License:	GPL
 Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.gz
@@ -10,8 +10,7 @@ Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.t
 URL:		http://packages.qa.debian.org/o/os-prober.html
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-# no binary blobs
-%define		_enable_debug_packages	0
+%define		_libdir		%{_prefix}/lib
 
 %description
 This is a small package that may be depended on by any bootloader
@@ -37,7 +36,7 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/lib/%{name},%{_bindir},%{_datadir}/%{name},%{_libdir}/%{name}}
 install -p %{name} $RPM_BUILD_ROOT%{_bindir}
 install -p linux-boot-prober $RPM_BUILD_ROOT%{_bindir}
-cp -a common.sh $RPM_BUILD_ROOT%{_datadir}/%{name}
+cp -p common.sh $RPM_BUILD_ROOT%{_datadir}/%{name}
 install -p newns $RPM_BUILD_ROOT%{_libdir}/%{name}
 
 ARCH=other
@@ -63,7 +62,7 @@ for probes in os-probes os-probes/mounted os-probes/init \
 done
 
 if [ "$ARCH" = x86 ]; then
-	cp -a os-probes/mounted/powerpc/20macosx $RPM_BUILD_ROOT%{_libdir}/os-probes/mounted
+	cp -p os-probes/mounted/powerpc/20macosx $RPM_BUILD_ROOT%{_libdir}/os-probes/mounted
 fi
 
 %clean
