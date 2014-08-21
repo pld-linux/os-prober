@@ -8,6 +8,8 @@ Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.xz
 # Source0-md5:	b13047131d2b1a924ed97dd0fa0885a7
 URL:		http://packages.qa.debian.org/o/os-prober.html
+BuildRequires:	tar >= 1:1.22
+BuildRequires:	xz
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_libdir		%{_prefix}/lib
