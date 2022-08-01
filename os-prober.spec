@@ -1,12 +1,12 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
 Summary(pl.UTF-8):	Narzędzia wykrywające instalacje innych systemów operacyjnych na dyskach
 Name:		os-prober
-Version:	1.80
+Version:	1.81
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.xz
-# Source0-md5:	663f8ae5b2ec231d874dc403dd135fe7
+# Source0-md5:	fbd9a262e596bf5cc45a062f18515d50
 URL:		http://packages.qa.debian.org/o/os-prober.html
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
