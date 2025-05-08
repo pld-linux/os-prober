@@ -1,12 +1,12 @@
 Summary:	Utilities that detect other operating system installs on a set of drives
 Summary(pl.UTF-8):	Narzędzia wykrywające instalacje innych systemów operacyjnych na dyskach
 Name:		os-prober
-Version:	1.82
+Version:	1.83
 Release:	1
 License:	GPL v2+
 Group:		Applications/System
 Source0:	http://ftp.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.xz
-# Source0-md5:	f970156e641123bfe6065f17e945b087
+# Source0-md5:	8d686604c565acedf4093f62770e1f15
 URL:		http://packages.qa.debian.org/o/os-prober.html
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	xz
@@ -27,16 +27,18 @@ systemy operacyjne i określenia sposobu uruchomienia innych instalacji
 Linuksa.
 
 %prep
-%setup -q
+%setup -q -c
 
 %build
-%{__make} \
+%{__make} -C work \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcflags}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/lib/%{name},%{_bindir},%{_datadir}/%{name},%{_libdir}/%{name}}
+
+cd work
 install -p %{name} $RPM_BUILD_ROOT%{_bindir}
 install -p linux-boot-prober $RPM_BUILD_ROOT%{_bindir}
 cp -p common.sh $RPM_BUILD_ROOT%{_datadir}/%{name}
@@ -73,7 +75,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README TODO debian/changelog debian/copyright
+%doc work/{README,TODO} work/debian/{changelog,copyright}
 %attr(755,root,root) %{_bindir}/linux-boot-prober
 %attr(755,root,root) %{_bindir}/os-prober
 %dir %{_libdir}/linux-boot-probes
